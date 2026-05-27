@@ -2,7 +2,13 @@
 
 **Repo:** https://github.com/zeuswae/conference-registration
 
-## Fastest — one double-click
+Your Neon database is already saved in `.neon.env` (not pushed to GitHub).
+
+## Fastest — double-click **DEPLOY NOW** on Desktop
+
+This pushes to GitHub, deploys to Vercel, and prints your live URL.
+
+## Or — one double-click (older script)
 
 1. In Neon: **Dashboard → Connect → Prisma** — copy the connection string.
 2. Save it as `.neon.env` in the project folder:

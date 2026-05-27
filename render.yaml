@@ -1,0 +1,17 @@
+# Backup deploy: https://render.com → New Blueprint → connect repo
+services:
+  - type: web
+    name: conference-registration
+    runtime: node
+    plan: free
+    buildCommand: npm install && bash scripts/vercel-build.sh
+    startCommand: npm start
+    envVars:
+      - key: DATABASE_URL
+        sync: false
+      - key: AUTH_SECRET
+        generateValue: true
+      - key: NEXT_PUBLIC_APP_URL
+        sync: false
+      - key: NODE_VERSION
+        value: "22"
