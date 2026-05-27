@@ -33,7 +33,12 @@ if [ ! -d "node_modules/next" ]; then
 fi
 
 if [ ! -f "prisma/dev.db" ]; then
-  echo "🗄️  Creating database..."
+  echo "🗄️  Creating local database..."
+  # Ensure schema matches local SQLite .env
+  grep -q 'provider = "sqlite"' prisma/schema.prisma || {
+    sed -i.bak 's/provider = "postgresql"/provider = "sqlite"/' prisma/schema.prisma
+    npx prisma generate
+  }
   npx prisma db push
   npm run db:seed 2>/dev/null || node prisma/seed.mjs
 fi
