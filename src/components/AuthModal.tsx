@@ -98,6 +98,17 @@ export function AuthModal({ initialMode = "signin" }: { initialMode?: Mode }) {
               : "Register to join events and apply for membership"}
           </p>
 
+          {mode === "signin" && (
+            <div className="mb-4 p-3 rounded-xl bg-indigo-50 text-indigo-900 text-xs border border-indigo-100 space-y-1">
+              <p className="font-semibold">Demo accounts (after site is deployed)</p>
+              <p>Admin: admin@conference.local / admin12345</p>
+              <p>User: participant@conference.local / user12345</p>
+              <p className="text-indigo-700/80">
+                Or use Sign up to create your own account.
+              </p>
+            </div>
+          )}
+
           {error && (
             <div className="mb-4 p-3 rounded-xl bg-red-50 text-red-700 text-sm border border-red-100">
               {error}

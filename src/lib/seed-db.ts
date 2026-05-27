@@ -1,9 +1,7 @@
-import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
+import { prisma } from "./prisma";
 
-const prisma = new PrismaClient();
-
-async function main() {
+export async function seedDatabase() {
   const adminHash = await bcrypt.hash("admin12345", 12);
   const userHash = await bcrypt.hash("user12345", 12);
 
@@ -49,12 +47,4 @@ async function main() {
       active: true,
     },
   });
-
-  console.log("Seed complete.");
-  console.log("Admin: admin@conference.local / admin12345");
-  console.log("User:  participant@conference.local / user12345");
 }
-
-main()
-  .catch(console.error)
-  .finally(() => prisma.$disconnect());
