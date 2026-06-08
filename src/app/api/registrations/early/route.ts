@@ -3,7 +3,7 @@ import { v4 as uuidv4 } from "uuid";
 import { z } from "zod";
 import { getSession } from "@/lib/auth";
 import { prisma } from "@/lib/prisma";
-import { buildQrPayload, generateQrDataUrl } from "@/lib/qr";
+import { buildQrPayload, buildVerifyUrl, generateQrDataUrl } from "@/lib/qr";
 
 const schema = z.object({
   eventId: z.string(),
@@ -52,7 +52,7 @@ export async function POST(req: Request) {
     return NextResponse.json({
       registration: reg,
       qrDataUrl,
-      verifyUrl: `${process.env.NEXT_PUBLIC_APP_URL ?? ""}/verify/${reg.qrCode}`,
+      verifyUrl: buildVerifyUrl(reg.qrCode),
     });
   } catch (e) {
     const msg = e instanceof Error ? e.message : "Registration failed";

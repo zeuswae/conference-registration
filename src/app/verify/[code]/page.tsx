@@ -46,7 +46,12 @@ export default async function VerifyPage({
             <StatusBadge status={reg.status} />
             {reg.status === "APPROVED" && (
               <p className="mt-4 rounded-2xl bg-emerald-50 p-4 font-bold text-emerald-700">
-                Valid for event entry.
+                Paid and valid for event entry.
+              </p>
+            )}
+            {reg.status !== "APPROVED" && (
+              <p className="mt-4 rounded-2xl bg-amber-50 p-4 font-bold text-amber-700">
+                Not valid for entry until payment is verified by an admin.
               </p>
             )}
             {session?.role === "ADMIN" && reg.status === "APPROVED" && (
