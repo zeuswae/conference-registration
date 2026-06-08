@@ -5,17 +5,17 @@ const features = [
   {
     label: "01",
     title: "Early registration",
-    desc: "Open attendee signups early, collect details, and issue a unique QR code for smooth event check-in.",
+    desc: "Launch attendee registration early, collect complete details, and prepare each participant for check-in.",
   },
   {
     label: "02",
     title: "Payment confirmation",
-    desc: "Participants upload bank or e-wallet proof while admins review approvals from one organized portal.",
+    desc: "Collect bank or e-wallet proof, then keep approval status clear for participants and administrators.",
   },
   {
     label: "03",
     title: "Certificates",
-    desc: "Request and manage participation, recognition, appearance, presentation, and membership certificates.",
+    desc: "Manage participation, appearance, recognition, presentation, and membership certificate requests.",
   },
   {
     label: "04",
@@ -25,12 +25,35 @@ const features = [
   {
     label: "05",
     title: "Renewal reminders",
-    desc: "Keep members informed with renewal notices before their membership reaches expiry.",
+    desc: "Keep members informed with renewal notices before their membership expires.",
   },
   {
     label: "06",
     title: "Admin portal",
     desc: "Approve payments, manage registrations, issue certificates, and monitor renewal activity.",
+  },
+];
+
+const workflow = [
+  {
+    title: "Create the event record",
+    badge: "Setup",
+    desc: "Organizers prepare registration details, certificate options, membership categories, and payment instructions.",
+  },
+  {
+    title: "Register and submit proof",
+    badge: "Participant",
+    desc: "Participants complete their profile, register for the event, and upload payment proof when required.",
+  },
+  {
+    title: "Review and approve",
+    badge: "Admin",
+    desc: "Administrators verify payment submissions, monitor registration status, and keep records organized.",
+  },
+  {
+    title: "Issue QR codes and certificates",
+    badge: "Release",
+    desc: "Approved participants receive check-in support, certificate updates, and membership renewal guidance.",
   },
 ];
 
@@ -82,12 +105,15 @@ export default async function HomePage() {
             <a href="#about" className="nav-pill">
               About
             </a>
+            <a href="#how-it-works" className="nav-pill">
+              Guide
+            </a>
             <a href="#faqs" className="nav-pill">
               FAQs
             </a>
-            <Link href="/contact" className="nav-pill">
+            <a href="#contact" className="nav-pill">
               Contact
-            </Link>
+            </a>
           </div>
 
           <div className="hidden items-center gap-3 sm:flex">
@@ -107,15 +133,15 @@ export default async function HomePage() {
         <section className="hero-gradient text-white">
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-16 md:grid-cols-[1.05fr_0.95fr] md:py-20">
             <div>
-              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-white/75">
-                Research Conference - Convention - Forum
+              <p className="mb-4 text-sm font-semibold uppercase tracking-[0.22em] text-white/80">
+                Conference Registration - Membership - Certificates
               </p>
               <h1 className="max-w-3xl text-4xl font-black leading-tight md:text-6xl">
-                Organization &amp; Event Registration System
+                Event registration made clear, fast, and organized.
               </h1>
               <p className="mt-6 max-w-2xl text-base leading-8 text-white/86 md:text-lg">
-                A responsive service portal for event registration, QR check-ins, payment
-                verification, certificate requests, and membership renewal management.
+                Manage participant registration, QR check-ins, payment verification,
+                certificate requests, and membership renewals in one polished portal.
               </p>
             </div>
 
@@ -129,7 +155,7 @@ export default async function HomePage() {
                       <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-500">
                         Live overview
                       </p>
-                      <h2 className="text-xl font-black">Event dashboard</h2>
+                      <h2 className="text-xl font-black">Registration overview</h2>
                     </div>
                     <span className="rounded-full bg-emerald-50 px-3 py-1 text-xs font-bold text-emerald-700">
                       Active
@@ -139,7 +165,7 @@ export default async function HomePage() {
                     {[
                       ["248", "Registered"],
                       ["91%", "Approved"],
-                      ["36", "Requests"],
+                      ["36", "Certificates"],
                     ].map(([value, label]) => (
                       <div key={label} className="rounded-2xl bg-slate-50 p-3">
                         <p className="text-xl font-black text-slate-950">{value}</p>
@@ -148,7 +174,7 @@ export default async function HomePage() {
                     ))}
                   </div>
                   <div className="mt-5 space-y-3">
-                    {["QR code ready", "Payment for review", "Certificate queued"].map((item, index) => (
+                    {["QR code prepared", "Payment awaiting review", "Certificate request queued"].map((item, index) => (
                       <div key={item} className="flex items-center gap-3 rounded-2xl border border-slate-100 p-3">
                         <span className="grid h-9 w-9 place-items-center rounded-xl bg-indigo-50 text-sm font-black text-indigo-600">
                           {index + 1}
@@ -168,12 +194,12 @@ export default async function HomePage() {
             <div>
               <p className="section-kicker">Intro to the service</p>
               <h2 className="mt-3 max-w-2xl text-3xl font-black text-slate-950 md:text-4xl">
-                Built to keep conference operations simple, clear, and organized.
+                Built for smooth conference operations from registration to release.
               </h2>
             </div>
             <p className="max-w-md text-sm leading-7 text-slate-600">
-              From first registration to final certificate release, the portal gives
-              participants and admins a consistent place to manage the full event journey.
+              Give participants a simple experience while administrators manage approvals,
+              records, certificates, and membership updates with confidence.
             </p>
           </div>
 
@@ -190,18 +216,73 @@ export default async function HomePage() {
           </div>
         </section>
 
-        <section className="border-y border-slate-200 bg-white">
-          <div className="mx-auto grid max-w-6xl gap-8 px-5 py-14 md:grid-cols-3">
-            {[
-              ["Register", "Participants submit event and membership details from a clean guided form."],
-              ["Verify", "Admins review payment proofs and keep approvals transparent."],
-              ["Release", "QR codes, certificates, and renewal updates stay connected to each record."],
-            ].map(([title, copy]) => (
-              <div key={title}>
-                <h3 className="text-xl font-black text-slate-950">{title}</h3>
-                <p className="mt-3 text-sm leading-7 text-slate-600">{copy}</p>
+        <section id="how-it-works" className="how-section px-5 py-16 text-white md:py-20">
+          <div className="mx-auto max-w-6xl">
+            <div className="mx-auto mb-10 max-w-3xl text-center">
+              <p className="section-kicker section-kicker-light">How it works</p>
+              <h2 className="mt-3 text-3xl font-black leading-tight md:text-5xl">
+                Everything you need to manage conference registration.
+              </h2>
+              <p className="mx-auto mt-4 max-w-2xl text-sm leading-7 text-slate-300 md:text-base">
+                A guided workflow connects participants, administrators, payment review,
+                certificates, and membership tracking from start to finish.
+              </p>
+            </div>
+
+            <div className="grid items-center gap-8 lg:grid-cols-[0.88fr_1.12fr]">
+              <div className="space-y-4">
+                {workflow.map((step, index) => (
+                  <article key={step.title} className={`workflow-card ${index === 0 ? "workflow-card-active" : ""}`}>
+                    <span className="workflow-number">{index + 1}</span>
+                    <div>
+                      <div className="flex flex-wrap items-center gap-2">
+                        <h3 className="font-black text-slate-100">{step.title}</h3>
+                        <span className="workflow-badge">{step.badge}</span>
+                      </div>
+                      <p className="mt-2 text-sm leading-6 text-slate-400">{step.desc}</p>
+                    </div>
+                  </article>
+                ))}
               </div>
-            ))}
+
+              <div className="portal-preview">
+                <div className="preview-topbar">
+                  <span className="bg-pink-400" />
+                  <span className="bg-indigo-300" />
+                  <span className="bg-cyan-300" />
+                  <p>conference.portal/registration</p>
+                </div>
+                <div className="preview-body">
+                  <div className="preview-stats">
+                    {[
+                      ["Registrations", "248"],
+                      ["Pending review", "23"],
+                      ["Certificates", "36"],
+                    ].map(([label, value]) => (
+                      <div key={label}>
+                        <p>{label}</p>
+                        <strong>{value}</strong>
+                      </div>
+                    ))}
+                  </div>
+                  <div className="preview-table">
+                    {[
+                      ["Early registration", "Open", "Live"],
+                      ["Payment proof", "Review", "Admin"],
+                      ["QR check-in", "Ready", "Event"],
+                      ["Certificate request", "Queued", "Office"],
+                      ["Membership renewal", "Scheduled", "Email"],
+                    ].map(([name, status, owner]) => (
+                      <div key={name}>
+                        <span>{name}</span>
+                        <strong>{status}</strong>
+                        <em>{owner}</em>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </div>
           </div>
         </section>
 
@@ -224,6 +305,73 @@ export default async function HomePage() {
                 <p className="mt-4 text-sm leading-7 text-slate-600">{faq.answer}</p>
               </details>
             ))}
+          </div>
+        </section>
+
+        <section id="contact" className="contact-section px-5 py-16 text-white md:py-20">
+          <div className="mx-auto grid max-w-6xl items-center gap-12 md:grid-cols-[0.95fr_1.05fr]">
+            <div>
+              <p className="inline-flex rounded-full border border-indigo-300/40 bg-indigo-300/10 px-4 py-2 text-xs font-black uppercase tracking-[0.16em] text-indigo-100">
+                Contact us
+              </p>
+              <h2 className="mt-7 text-4xl font-black leading-tight md:text-5xl">
+                Let&apos;s build a smoother registration experience.
+              </h2>
+              <p className="mt-5 max-w-xl text-base leading-8 text-slate-300">
+                Have questions about registration flow, certificates, membership
+                tracking, or deployment? Send a message and we will help you move forward.
+              </p>
+
+              <div className="mt-9 space-y-5">
+                {[
+                  ["Email support", "support@conferenceportal.local"],
+                  ["Feature requests", "Share workflow ideas for organizers and participants."],
+                  ["Admin assistance", "Get help with payments, certificates, and renewals."],
+                ].map(([title, detail], index) => (
+                  <div key={title} className="flex items-start gap-4">
+                    <span className="contact-icon contact-icon-indigo">{index + 1}</span>
+                    <div>
+                      <h3 className="font-black text-slate-100">{title}</h3>
+                      <p className="mt-1 text-sm leading-6 text-slate-400">{detail}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <form className="contact-card">
+              <div>
+                <label className="contact-label" htmlFor="contact-name">
+                  Name
+                </label>
+                <input id="contact-name" className="contact-field" placeholder="Your name" />
+              </div>
+
+              <div>
+                <label className="contact-label" htmlFor="contact-email">
+                  Email
+                </label>
+                <input id="contact-email" type="email" className="contact-field" placeholder="you@example.com" />
+              </div>
+
+              <div>
+                <label className="contact-label" htmlFor="contact-message">
+                  Message
+                </label>
+                <textarea
+                  id="contact-message"
+                  className="contact-field min-h-32 resize-none"
+                  placeholder="Tell us what you need help with."
+                />
+              </div>
+
+              <button type="button" className="contact-submit">
+                Send message -&gt;
+              </button>
+              <p className="text-center text-xs font-semibold text-slate-500">
+                We usually respond within 24 hours.
+              </p>
+            </form>
           </div>
         </section>
       </main>
@@ -261,12 +409,15 @@ export default async function HomePage() {
               <a href="#about" className="hover:text-white">
                 About
               </a>
+              <a href="#how-it-works" className="hover:text-white">
+                How it works
+              </a>
               <a href="#faqs" className="hover:text-white">
                 FAQs
               </a>
-              <Link href="/contact" className="hover:text-white">
+              <a href="#contact" className="hover:text-white">
                 Contact Us
-              </Link>
+              </a>
               {!session && (
                 <Link href="/login" className="hover:text-white">
                   Sign in

@@ -15,11 +15,15 @@ export default async function MembershipPage() {
   });
 
   return (
-    <div>
-      <h1 className="text-2xl font-bold mb-2">Membership</h1>
-      <p className="text-slate-600 text-sm mb-8">
-        Institutional, lifetime, individual, and mechatronics certifications with renewal tracking.
-      </p>
+    <div className="space-y-8">
+      <section>
+        <p className="section-kicker">Membership</p>
+        <h1 className="mt-2 text-3xl font-black text-slate-950">Membership tracking</h1>
+        <p className="mt-3 max-w-2xl text-sm leading-7 text-slate-600">
+          Apply for membership, submit payment proof, and monitor renewal
+          status for institutional, lifetime, individual, and certification records.
+        </p>
+      </section>
       <MembershipForms
         memberships={memberships.map((m) => ({
           id: m.id,
