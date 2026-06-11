@@ -3,11 +3,27 @@ import { z } from "zod";
 import { createSession, registerUser } from "@/lib/auth";
 
 const schema = z.object({
-  email: z.string().email(),
-  password: z.string().min(8),
-  name: z.string().min(2),
-  organization: z.string().max(150).optional(),
-  phone: z.string().max(13).regex(/^(09|\+639|639)\d{9}$/, "Invalid phone number format").optional(),
+  email: z
+    .string()
+    .email("Please enter a valid email address (e.g. you@example.com)"),
+  password: z
+    .string()
+    .min(8, "Password must be at least 8 characters long"),
+  name: z
+    .string()
+    .min(2, "Full name must be at least 2 characters"),
+  organization: z
+    .string()
+    .max(150, "Organization name must be under 150 characters")
+    .optional(),
+  phone: z
+    .string()
+    .max(13, "Phone number is too long")
+    .regex(
+      /^(09|\+639|639)\d{9}$/,
+      "Phone number must start with 09, +639, or 639 followed by 9 digits"
+    )
+    .optional(),
 });
 
 export async function POST(req: Request) {
@@ -21,8 +37,14 @@ export async function POST(req: Request) {
       role: user.role,
     });
     return NextResponse.json({ ok: true });
+
   } catch (e) {
-    const msg = e instanceof Error ? e.message : "Registration failed";
+    if (e instanceof z.ZodError) {
+      const message = e.errors[0]?.message ?? "Please check your input and try again.";
+      return NextResponse.json({ error: message }, { status: 400 });
+    }
+
+    const msg = e instanceof Error ? e.message : "Something went wrong. Please try again.";
     return NextResponse.json({ error: msg }, { status: 400 });
   }
 }
