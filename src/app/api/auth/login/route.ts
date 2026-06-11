@@ -66,18 +66,18 @@ export async function POST(req: Request) {
   } catch (e) {
     if (e instanceof z.ZodError) {
       return NextResponse.json(
-        { error: "Please enter a valid email and a password of at least 8 characters." }, 
+        { error: "Please provide a valid email address and ensure all fields are correctly formatted." }, 
         { status: 400 }
       );
     }
 
-    const msg = e instanceof Error ? e.message : "Login failed";
+    const msg = e instanceof Error ? e.message : "Registration failed";
 
-    if (msg.includes("Prisma") || msg.includes("DATABASE_URL") || msg.includes("invocation")) {
-      console.error("Backend Database Error:", msg); 
+    if (msg.includes("Prisma") || msg.includes("Unique constraint")) {
+      console.error("Database Error:", msg); 
       return NextResponse.json(
-        { error: "System error: Cannot connect to the database." }, 
-        { status: 500 }
+        { error: "This email is already registered, or there is a system issue." }, 
+        { status: 400 }
       );
     }
 
