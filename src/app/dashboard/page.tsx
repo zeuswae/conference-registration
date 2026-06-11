@@ -78,7 +78,7 @@ export default async function DashboardPage() {
             {session.role === "ADMIN" && (
               <QuickCard
                 title="Open admin console"
-                description="Review payments, approve records, issue certificates, and manage renewal reminders."
+                description="Review payments, approve records, approve certificates, and manage renewal reminders."
                 href="/admin"
                 accent
               />

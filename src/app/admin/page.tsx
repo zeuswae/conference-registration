@@ -36,7 +36,7 @@ export default async function AdminPage() {
           <p className="section-kicker">Admin console</p>
           <h1 className="mt-2 text-3xl font-black text-slate-950">Operations control center</h1>
           <p className="mt-3 text-sm leading-7 text-slate-600">
-            Review payments, issue certificates, and manage renewal reminders.
+            Review payments, approve certificates, and manage renewal reminders.
             Total memberships in database: <strong>{membershipCount}</strong>.
           </p>
         </section>

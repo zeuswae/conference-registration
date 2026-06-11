@@ -78,12 +78,12 @@ export async function GET(
   if (certificate.userId !== session.id && session.role !== "ADMIN") {
     return NextResponse.json({ error: "Forbidden" }, { status: 403 });
   }
-  if (certificate.status !== "ISSUED") {
-    return NextResponse.json({ error: "Certificate is not issued yet" }, { status: 400 });
+  if (certificate.status !== "APPROVED" && certificate.status !== "ISSUED") {
+    return NextResponse.json({ error: "Certificate is not approved yet" }, { status: 400 });
   }
 
   const typeLabel = EVENT_CERT_LABELS[certificate.type];
-  const issued = certificate.issuedAt ?? certificate.updatedAt;
+  const approved = certificate.issuedAt ?? certificate.updatedAt;
   const event = certificate.eventId
     ? await prisma.event.findUnique({ where: { id: certificate.eventId } })
     : null;
@@ -124,7 +124,7 @@ export async function GET(
       <div class="recipient">${escapeHtml(certificate.recipientName)}</div>
       <p class="subtitle">${escapeHtml(copy.action)}</p>
       <div class="event">${escapeHtml(eventName)}</div>
-      <p class="meta">Held on ${escapeHtml(eventDate)} | Issued ${issued.toLocaleDateString()}</p>
+      <p class="meta">Held on ${escapeHtml(eventDate)} | Approved ${approved.toLocaleDateString()}</p>
       <p class="meta">${escapeHtml(copy.detail)}</p>
       <div class="signatures">
         <div class="line">${escapeHtml(copy.signatureA)}</div>

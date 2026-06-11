@@ -52,17 +52,17 @@ const workflow = [
     ],
   },
   {
-    title: "Issue QR tickets and certificates",
+    title: "Release QR tickets and certificates",
     badge: "Release",
     desc: "Approved participants receive check-in support, certificate updates, and membership renewal guidance.",
     stats: [
-      ["Tickets", "Issued"],
+      ["Tickets", "Ready"],
       ["Certificates", "36"],
       ["Renewals", "Scheduled"],
     ],
     rows: [
       ["QR check-in", "Valid", "Event"],
-      ["Certificate request", "Issued", "Office"],
+      ["Certificate request", "Approved", "Office"],
       ["Membership renewal", "Scheduled", "Email"],
       ["Participant record", "Complete", "Portal"],
     ],

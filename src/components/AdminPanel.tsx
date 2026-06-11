@@ -72,8 +72,7 @@ export function AdminPanel({
   const groupedCertificates = useMemo(
     () => ({
       pending: certificates.filter((certificate) => certificate.status === "PENDING"),
-      approved: certificates.filter((certificate) => certificate.status === "APPROVED"),
-      issued: certificates.filter((certificate) => certificate.status === "ISSUED"),
+      approved: certificates.filter((certificate) => certificate.status === "APPROVED" || certificate.status === "ISSUED"),
       rejected: certificates.filter((certificate) => certificate.status === "REJECTED"),
     }),
     [certificates],
@@ -120,7 +119,7 @@ export function AdminPanel({
         setMsg(data.error ?? "Certificate update failed.");
         return;
       }
-      setMsg(action === "approve" ? "Certificate approved and issued." : "Certificate rejected.");
+      setMsg(action === "approve" ? "Certificate approved." : "Certificate rejected.");
       router.refresh();
     } finally {
       setPendingAction(null);
@@ -151,7 +150,7 @@ export function AdminPanel({
           />
           <AdminChoice
             title="Certificate Logs"
-            description="Approve, issue, and audit certificate requests."
+            description="Approve, reject, and audit certificate requests."
             count={certificates.length}
             onClick={() => setView("certificates")}
           />
@@ -188,7 +187,6 @@ export function AdminPanel({
         <div className="space-y-6">
           <CertificateGroup title="Pending certificates" certificates={groupedCertificates.pending} onReview={reviewCert} pendingAction={pendingAction} />
           <CertificateGroup title="Approved certificates" certificates={groupedCertificates.approved} onReview={reviewCert} pendingAction={pendingAction} />
-          <CertificateGroup title="Issued certificates" certificates={groupedCertificates.issued} onReview={reviewCert} pendingAction={pendingAction} />
           <CertificateGroup title="Rejected certificates" certificates={groupedCertificates.rejected} onReview={reviewCert} pendingAction={pendingAction} />
         </div>
       )}
@@ -328,15 +326,15 @@ function CertificateGroup({
                 <p className="mt-1 text-sm font-semibold text-slate-600">{certificate.recipientName}</p>
                 {certificate.paperTitle && <p className="mt-1 text-xs text-slate-500">Paper: {certificate.paperTitle}</p>}
               </div>
-              <StatusBadge status={certificate.status} />
+              <StatusBadge status={certificate.status === "ISSUED" ? "APPROVED" : certificate.status} />
             </div>
             <div className="mt-4 grid gap-2 text-xs text-slate-500 sm:grid-cols-2">
               <p>Requested: {formatDate(certificate.createdAt)}</p>
               <p>Updated: {formatDate(certificate.updatedAt)}</p>
-              <p>Issued: {formatDate(certificate.issuedAt)}</p>
+              <p>Reviewed: {formatDate(certificate.issuedAt ?? certificate.updatedAt)}</p>
             </div>
             <div className="mt-4 flex flex-wrap gap-2">
-              {(certificate.status === "PENDING" || certificate.status === "APPROVED") && (
+              {certificate.status === "PENDING" && (
                 <>
                   <button
                     type="button"
@@ -356,7 +354,7 @@ function CertificateGroup({
                   </button>
                 </>
               )}
-              {certificate.status === "ISSUED" && (
+              {(certificate.status === "APPROVED" || certificate.status === "ISSUED") && (
                 <a
                   href={`/api/certificates/event/${certificate.id}`}
                   target="_blank"

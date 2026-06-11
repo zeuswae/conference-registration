@@ -31,7 +31,7 @@ const features = [
   {
     label: "06",
     title: "Admin portal",
-    desc: "Approve payments, manage registrations, issue certificates, and monitor renewal activity.",
+    desc: "Approve payments, manage registrations, approve certificates, and monitor renewal activity.",
   },
 ];
 

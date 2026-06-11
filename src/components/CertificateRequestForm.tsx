@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { EVENT_CERT_LABELS } from "@/lib/constants";
 import type { EventCertType } from "@prisma/client";
 
@@ -11,6 +12,7 @@ export function CertificateRequestForm({ eventOptions }: { eventOptions: { id: s
   const [message, setMessage] = useState("");
   const [isError, setIsError] = useState(false);
   const [loading, setLoading] = useState(false);
+  const router = useRouter();
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -37,6 +39,7 @@ export function CertificateRequestForm({ eventOptions }: { eventOptions: { id: s
       setMessage("Certificate request submitted successfully.");
       form.reset();
       setType("PARTICIPATION");
+      router.refresh();
     } catch (err) {
       setIsError(true);
       setMessage(err instanceof Error ? err.message : "Failed");
@@ -46,8 +49,8 @@ export function CertificateRequestForm({ eventOptions }: { eventOptions: { id: s
   }
 
   return (
-    <div className="max-w-xl">
-      <form onSubmit={handleSubmit} className="p-6 bg-white rounded-2xl border space-y-4">
+    <div className="w-full">
+      <form onSubmit={handleSubmit} className="dashboard-card space-y-4 p-6">
         <h2 className="text-lg font-bold">Request event certificate</h2>
         <div>
           <label className="label">Certificate type</label>
