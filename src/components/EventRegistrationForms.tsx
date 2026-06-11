@@ -216,6 +216,18 @@ export function EventRegistrationForms({ events }: { events: Event[] }) {
                 className="input-field"
                 required
               />
+              <label className="label">Upload proof (image/PDF, max 5MB)</label>
+              <label className="flex cursor-pointer items-center gap-3 rounded-xl border border-dashed border-indigo-300 bg-indigo-50 px-4 py-3 text-sm font-semibold text-indigo-600 hover:bg-indigo-100 transition">
+                Choose file to upload
+                <input
+                  ref={proofRef}
+                  name="proof"
+                  type="file"
+                  accept="image/*,.pdf,application/pdf"
+                  className="hidden"
+                  required
+                />
+              </label>
               <button
                 type="button"
                 className="mt-2 text-xs text-indigo-600 hover:underline"
@@ -238,6 +250,20 @@ export function EventRegistrationForms({ events }: { events: Event[] }) {
     </div>
   );
 }
+
+const FIELD_MAX: Record<string, number> = {
+  attendeeName: 100,
+  attendeeEmail: 150,
+  organization: 150,
+  paperTitle: 255,
+  transactionNo: 50,
+  paymentFor: 100,
+  payeeName: 100,
+};
+
+const FIELD_MIN: Record<string, number> = {
+  amount: 1,
+};
 
 function Field({
   name,
@@ -264,6 +290,9 @@ function Field({
         className="input-field"
         required={required}
         defaultValue={defaultValue}
+        maxLength={FIELD_MAX[name]}
+        min={type === "number" ? FIELD_MIN[name] : undefined}
+        step={type === "number" ? "0.01" : undefined}
       />
     </div>
   );

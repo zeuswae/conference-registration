@@ -9,6 +9,7 @@ function formatDate(value: Date | null) {
   return new Intl.DateTimeFormat("en", {
     dateStyle: "medium",
     timeStyle: "short",
+    timeZone: "Asia/Manila",
   }).format(value);
 }
 
