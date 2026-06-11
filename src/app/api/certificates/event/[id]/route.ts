@@ -11,6 +11,57 @@ function escapeHtml(value: string) {
     .replaceAll('"', "&quot;");
 }
 
+function certificateCopy(certificate: {
+  type: "PARTICIPATION" | "APPEARANCE" | "RECOGNITION" | "PRESENTATION";
+  role: string | null;
+  paperTitle: string | null;
+  presenterName: string | null;
+}) {
+  if (certificate.type === "APPEARANCE") {
+    return {
+      intro: "This certificate is awarded to",
+      action: "for confirmed appearance and attendance during",
+      detail: "This record certifies presence for the stated event.",
+      signatureA: "Event Secretariat",
+      signatureB: "Attendance Committee",
+    };
+  }
+
+  if (certificate.type === "RECOGNITION") {
+    const role = certificate.role ? ` as ${certificate.role}` : "";
+    return {
+      intro: "This certificate of recognition is awarded to",
+      action: `in appreciation of valuable service${role} for`,
+      detail: "This record recognizes contribution and support to the event.",
+      signatureA: "Event Chairperson",
+      signatureB: "Organizing Committee",
+    };
+  }
+
+  if (certificate.type === "PRESENTATION") {
+    const presenter = certificate.presenterName
+      ? `Presented by ${certificate.presenterName}.`
+      : "Presented during the research conference.";
+    return {
+      intro: "This certificate is awarded to",
+      action: "for presenting research work during",
+      detail: certificate.paperTitle
+        ? `${presenter} Paper title: ${certificate.paperTitle}.`
+        : presenter,
+      signatureA: "Research Chairperson",
+      signatureB: "Conference Director",
+    };
+  }
+
+  return {
+    intro: "This certificate is proudly presented to",
+    action: "for successful participation in",
+    detail: "This record certifies participation in the stated conference event.",
+    signatureA: "Event Chairperson",
+    signatureB: "Authorized Signatory",
+  };
+}
+
 export async function GET(
   _req: Request,
   { params }: { params: Promise<{ id: string }> },
@@ -40,6 +91,7 @@ export async function GET(
   const eventDate = event
     ? new Intl.DateTimeFormat("en", { dateStyle: "long" }).format(event.startDate)
     : "Event date on record";
+  const copy = certificateCopy(certificate);
   const html = `<!doctype html>
 <html>
 <head>
@@ -68,15 +120,15 @@ export async function GET(
     <section class="inner">
       <div class="kicker">Conference Portal</div>
       <h1>${escapeHtml(typeLabel)}</h1>
-      <p class="subtitle">This certificate is proudly presented to</p>
+      <p class="subtitle">${escapeHtml(copy.intro)}</p>
       <div class="recipient">${escapeHtml(certificate.recipientName)}</div>
-      <p class="subtitle">for successfully attending and participating in</p>
+      <p class="subtitle">${escapeHtml(copy.action)}</p>
       <div class="event">${escapeHtml(eventName)}</div>
       <p class="meta">Held on ${escapeHtml(eventDate)} | Issued ${issued.toLocaleDateString()}</p>
-      ${certificate.paperTitle ? `<p class="meta">Paper: ${escapeHtml(certificate.paperTitle)}</p>` : ""}
+      <p class="meta">${escapeHtml(copy.detail)}</p>
       <div class="signatures">
-        <div class="line">Event Chairperson</div>
-        <div class="line">Authorized Signatory</div>
+        <div class="line">${escapeHtml(copy.signatureA)}</div>
+        <div class="line">${escapeHtml(copy.signatureB)}</div>
       </div>
       <p class="cert-id">Certificate ID: ${escapeHtml(certificate.id)}</p>
     </section>

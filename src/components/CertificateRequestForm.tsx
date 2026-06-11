@@ -14,10 +14,11 @@ export function CertificateRequestForm({ eventOptions }: { eventOptions: { id: s
 
   async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
     e.preventDefault();
+    const form = e.currentTarget;
     setLoading(true);
     setMessage("");
     setIsError(false);
-    const fd = new FormData(e.currentTarget);
+    const fd = new FormData(form);
     try {
       const res = await fetch("/api/certificates/event", {
         method: "POST",
@@ -34,7 +35,8 @@ export function CertificateRequestForm({ eventOptions }: { eventOptions: { id: s
       const data = await res.json();
       if (!res.ok) throw new Error(data.error);
       setMessage("Certificate request submitted successfully.");
-      e.currentTarget.reset();
+      form.reset();
+      setType("PARTICIPATION");
     } catch (err) {
       setIsError(true);
       setMessage(err instanceof Error ? err.message : "Failed");
@@ -65,7 +67,7 @@ export function CertificateRequestForm({ eventOptions }: { eventOptions: { id: s
           <div>
             <label className="label">Related event (optional)</label>
             <select name="eventId" className="input-field">
-              <option value="">—</option>
+              <option value="">None</option>
               {eventOptions.map((ev) => (
                 <option key={ev.id} value={ev.id}>
                   {ev.name}
