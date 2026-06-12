@@ -6,23 +6,34 @@ import { prisma } from "@/lib/prisma";
 import { buildQrPayload, buildVerifyUrl, generateQrDataUrl } from "@/lib/qr";
 
 const schema = z.object({
-  eventId: z.string(),
-  attendeeName: z.string().min(2),
-  attendeeEmail: z.string().email(),
-  organization: z.string().max(150).optional(),
-  paperTitle: z.string().max(255).optional(),
+  eventId: z.string().min(1).max(50),
+  attendeeName: z.string().trim().min(2).max(100),
+  attendeeEmail: z.string().trim().email().max(150),
+  organization: z.string().trim().max(150).optional(),
+  paperTitle: z.string().trim().max(255).optional(),
 });
 
 export async function POST(req: Request) {
   const session = await getSession();
-  if (!session) return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+
+  if (!session) {
+    return NextResponse.json({ error: "Unauthorized" }, { status: 401 });
+  }
 
   try {
     const body = schema.parse(await req.json());
-    const event = await prisma.event.findUnique({ where: { id: body.eventId } });
-    if (!event?.active) return NextResponse.json({ error: "Event not found" }, { status: 404 });
 
-    const normalizedEmail = body.attendeeEmail.trim().toLowerCase();
+    const event = await prisma.event.findUnique({
+      where: { id: body.eventId },
+      select: { id: true, active: true },
+    });
+
+    if (!event?.active) {
+      return NextResponse.json({ error: "Event not found" }, { status: 404 });
+    }
+
+    const normalizedEmail = body.attendeeEmail.toLowerCase();
+
     const existing = await prisma.eventRegistration.findFirst({
       where: {
         eventId: body.eventId,
@@ -42,30 +53,34 @@ export async function POST(req: Request) {
     }
 
     const qrCode = `REG-${uuidv4().slice(0, 8).toUpperCase()}`;
-    const reg = await prisma.eventRegistration.create({
+
+    const registration = await prisma.eventRegistration.create({
       data: {
         userId: session.id,
         eventId: body.eventId,
         type: "EARLY",
-        status: "APPROVED",
+        status: "PENDING",
         qrCode,
         attendeeName: body.attendeeName,
         attendeeEmail: normalizedEmail,
-        organization: body.organization,
-        paperTitle: body.paperTitle,
+        organization: body.organization || null,
+        paperTitle: body.paperTitle || null,
       },
     });
 
-    const payload = buildQrPayload(reg.id, reg.qrCode);
-    const qrDataUrl = await generateQrDataUrl(payload);
+    const qrDataUrl = await generateQrDataUrl(
+      buildQrPayload(registration.id, registration.qrCode),
+    );
 
     return NextResponse.json({
-      registration: reg,
+      ok: true,
+      registration,
       qrDataUrl,
-      verifyUrl: buildVerifyUrl(reg.qrCode),
+      verifyUrl: buildVerifyUrl(registration.qrCode),
     });
-  } catch (e) {
-    const msg = e instanceof Error ? e.message : "Registration failed";
-    return NextResponse.json({ error: msg }, { status: 400 });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : "Registration failed";
+
+    return NextResponse.json({ error: message }, { status: 400 });
   }
 }
