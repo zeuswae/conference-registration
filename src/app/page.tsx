@@ -1,6 +1,7 @@
 import Link from "next/link";
 import { getSession } from "@/lib/auth";
 import { HowItWorks } from "@/components/HowItWorks";
+import { NavBar } from "@/components/NavBar"; 
 
 const features = [
   {
@@ -65,87 +66,7 @@ export default async function HomePage() {
 
   return (
     <div className="min-h-screen bg-[#f4f6fb]">
-      <header className="sticky top-0 z-30 border-b border-white/30 bg-white/85 backdrop-blur-xl">
-        <nav className="mx-auto flex max-w-6xl items-center justify-between gap-4 px-5 py-4">
-          <Link href="/" className="flex items-center gap-3 font-bold text-slate-950">
-            <span className="grid h-10 w-10 place-items-center rounded-xl bg-indigo-600 text-white shadow-lg shadow-indigo-600/25">
-              CR
-            </span>
-            <span className="hidden text-sm uppercase tracking-[0.22em] text-slate-700 sm:inline">
-              Conference Portal
-            </span>
-          </Link>
-
-          {/* Pill nav — hidden on mobile */}
-          <div className="hidden sm:flex items-center gap-1 rounded-full border border-slate-200 bg-white p-1 text-sm font-semibold text-slate-600 shadow-sm">
-            <a href="#home" className="nav-pill">
-              Home
-            </a>
-            <a href="#about" className="nav-pill">
-              About
-            </a>
-            <a href="#how-it-works" className="nav-pill">
-              How it works
-            </a>
-            <a href="#faqs" className="nav-pill">
-              FAQs
-            </a>
-            <a href="#contact" className="nav-pill">
-              Contact
-            </a>
-          </div>
-
-          {/* Right side */}
-          <div className="flex items-center gap-2">
-            {!session && (
-              <Link href="/login" className="hidden text-sm font-semibold text-slate-600 hover:text-indigo-700 sm:block">
-                Sign in
-              </Link>
-            )}
-            <Link href={primaryHref} className="btn-primary px-5 py-2.5 text-sm">
-              {primaryText}
-            </Link>
-
-            {/* Hamburger — mobile only */}
-            <details className="relative sm:hidden">
-              <summary className="grid h-10 w-10 cursor-pointer list-none place-items-center rounded-xl border border-slate-200 bg-white text-slate-700 shadow-sm">
-                <svg width="18" height="18" viewBox="0 0 18 18" fill="none">
-                  <path d="M2 4h14M2 9h14M2 14h14" stroke="currentColor" strokeWidth="2" strokeLinecap="round" />
-                </svg>
-              </summary>
-              <div className="absolute right-0 top-12 z-50 w-52 rounded-2xl border border-slate-200 bg-white p-2 shadow-xl">
-                {[
-                  ["#home", "Home"],
-                  ["#about", "About"],
-                  ["#how-it-works", "How it works"],
-                  ["#faqs", "FAQs"],
-                  ["#contact", "Contact"],
-                ].map(([href, label]) => (
-                  <a
-                    key={href}
-                    href={href}
-                    className="block rounded-xl px-4 py-2.5 text-sm font-semibold text-slate-700 hover:bg-slate-50"
-                  >
-                    {label}
-                  </a>
-                ))}
-                {!session && (
-                  <>
-                    <div className="my-1 h-px w-full bg-slate-100" />
-                    <Link
-                      href="/login"
-                      className="block rounded-xl px-4 py-2.5 text-sm font-semibold text-indigo-600 hover:bg-slate-50"
-                    >
-                      Sign in
-                    </Link>
-                  </>
-                )}
-              </div>
-            </details>
-          </div>
-        </nav>
-      </header>
-
+      <NavBar session={session} primaryHref={primaryHref} primaryText={primaryText} />
       <main id="home">
         <section className="hero-gradient text-white">
           <div className="mx-auto grid max-w-6xl items-center gap-10 px-5 py-16 md:grid-cols-[1.05fr_0.95fr] md:py-20">
@@ -165,8 +86,8 @@ export default async function HomePage() {
             <div className="relative min-h-[380px]">
               <div className="pointer-events-none absolute left-5 top-8 h-36 w-36 rounded-full bg-white/20 blur-3xl" />
               <div className="pointer-events-none absolute bottom-10 right-0 h-44 w-44 rounded-full bg-indigo-300/20 blur-3xl" />
-              <div className="relative mx-auto max-w-md rounded-[2rem] border border-white/30 bg-white/18 p-5 shadow-2xl backdrop-blur-xl">
-                <div className="rounded-[1.5rem] bg-white p-6 text-slate-950 shadow-xl">
+              <div className="relative mx-auto max-w-md rounded-[2rem] border border-white/30 bg-white/18 p-4 shadow-2xl backdrop-blur-xl">
+                <div className="rounded-[1.5rem] bg-white p-4 text-slate-950 shadow-xl">
                   <div className="mb-5 flex items-center justify-between">
                     <div>
                       <p className="text-xs font-bold uppercase tracking-[0.16em] text-indigo-500">
@@ -178,7 +99,7 @@ export default async function HomePage() {
                       Active
                     </span>
                   </div>
-                  <div className="grid grid-cols-3 gap-3 text-center">
+                  <div className="grid grid-cols-3 gap-3">
                     {[
                       ["248", "Registered"],
                       ["91%", "Approved"],
